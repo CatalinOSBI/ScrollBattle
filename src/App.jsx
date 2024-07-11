@@ -8,7 +8,7 @@ function App() {
   return (
 
       <div>
-          Scoll Battle
+          Scroll Battle
       </div>
 
   )
