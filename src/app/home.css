@@ -1,3 +1,7 @@
 .menu{
   min-height: 648px;
 }
+
+.background{
+  background-image: url('/Circles.png');
+}
