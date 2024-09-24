@@ -24,8 +24,8 @@ const OSBIbutton: React.FC<OSBIbuttonProps> = ({
   height,
   borderRadius,
   glow = true,
-  primColor = "rgb(24 38 45)",
-  secColor = "rgb(35 56 66)",
+  // primColor = "rgb(24 38 45)",
+  // secColor = "rgb(35 56 66)",
   glowPrimColor = "rgb(0, 255, 255)",
   glowSecColor = "rgb(0, 140, 255)",
   border = false,
@@ -44,9 +44,9 @@ const OSBIbutton: React.FC<OSBIbuttonProps> = ({
           width: width,
           height: height,
           borderRadius: borderRadius,
-          background: border
-            ? `transparent`
-            : `linear-gradient(to right, ${primColor} 0%, ${secColor} 100%)`,
+          // background: border
+          //   ? `transparent`
+          //   : `linear-gradient(to right, ${primColor} 0%, ${secColor} 100%)`,
           border: border ? `2px solid ${borderColor}` : "none",
         }}
       >

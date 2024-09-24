@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 27.5.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" [
+	<!ENTITY st0 "opacity:0.15;">
+	<!ENTITY st1 "fill:#FFFFFF;">
+]>
+<svg version="1.1" id="Background" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200" x="0px" y="0px"
+	 viewBox="0 0 200 200" style="enable-background:new 0 0 200 200;" xml:space="preserve">
+<g id="Circles" style="&st0;">
+	<path style="&st1;" d="M0,127.067c15.13,0,27.396-12.266,27.396-27.396S15.13,72.275,0,72.275V127.067z"/>
+	<path style="&st1;" d="M200,127.396c-15.13,0-27.396-12.266-27.396-27.396S184.87,72.604,200,72.604V127.396z"/>
+	<path style="&st1;" d="M127.396,200c0-15.13-12.266-27.396-27.396-27.396S72.604,184.87,72.604,200H127.396z"/>
+	<path style="&st1;" d="M73.333,0h54.063c0,15.13-12.266,27.396-27.396,27.396S72.604,15.13,72.604,0"/>
+</g>
+</svg>
