@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Googlebutton from "../ui/Googlebutton";
 import { useAuth } from "./AuthContext";
 
 const Page = () => {
@@ -72,6 +73,9 @@ const Page = () => {
       <button className="border" onClick={() => console.log(userEmail)}>
         log
       </button>
+
+      {/* Google Oauth */}
+      <Googlebutton />
     </>
   );
 };

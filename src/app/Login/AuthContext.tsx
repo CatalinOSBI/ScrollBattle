@@ -41,6 +41,7 @@ interface authContextInterface {
     password: string,
     e: React.FormEvent<HTMLFormElement>
   ) => Promise<void>;
+  handleGoogleLogIn: () => Promise<void>;
 }
 
 //Expecting React children components
@@ -74,6 +75,7 @@ export const AuthProvider: React.FC<authProviderProps> = ({ children }) => {
   // Initialize Firebase
   const app: FirebaseApp = initializeApp(firebaseConfig);
   const auth = getAuth(app);
+  const providerGoogle = new GoogleAuthProvider();
   // connectAuthEmulator(auth, "http://localhost:9099");
 
   //Sing Up (Create Account)
@@ -113,8 +115,7 @@ export const AuthProvider: React.FC<authProviderProps> = ({ children }) => {
   ): Promise<void> => {
     e.preventDefault();
     return signInWithEmailAndPassword(auth, email, password)
-    .then(
-      (userCredential) => {
+      .then((userCredential) => {
         // Signed in
         const user = userCredential.user!;
         console.log("User logged in successfully!");
@@ -123,7 +124,31 @@ export const AuthProvider: React.FC<authProviderProps> = ({ children }) => {
         const errorCode = error.code;
         const errorMessage = error.message;
         console.error(errorCode, errorMessage);
-      });  
+      });
+  };
+
+  // Google LogIn
+  const handleGoogleLogIn = async (): Promise<void> => {
+    signInWithPopup(auth, providerGoogle)
+      .then((result) => {
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        //Null check
+        if (credential) {
+          const token = credential.accessToken;
+          // The signed-in user info.
+          const user = result.user;
+          // IdP data available using getAdditionalUserInfo(result)
+          // ...
+          console.log(credential);
+          console.log(token);
+          console.log(user);
+        }
+        // Signed up w/ google...
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
   };
 
   //Sign Out
@@ -168,6 +193,7 @@ export const AuthProvider: React.FC<authProviderProps> = ({ children }) => {
         handleSignUp,
         handleSignOut,
         handleLogIn,
+        handleGoogleLogIn,
       }}
     >
       {children}
