@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { AuthProvider } from "./Login/AuthContext";
+import { MenuProvider } from "./ui/Menus/MenuContext";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -15,7 +16,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <AuthProvider>
-        <body className={`antialiased`}>{children}</body>
+        <MenuProvider>
+          <body className={`antialiased`}>{children}</body>
+        </MenuProvider>
       </AuthProvider>
     </html>
   );

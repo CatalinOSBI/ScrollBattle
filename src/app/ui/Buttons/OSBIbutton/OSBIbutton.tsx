@@ -1,5 +1,4 @@
-import { useState } from "react";
-import OSBIfrostedBorder from "../OSBIfrostedBorder";
+import OSBIfrostedBorder from "../../OSBIfrostedBorder";
 import "./OSBIbutton.css";
 
 interface OSBIbuttonProps {

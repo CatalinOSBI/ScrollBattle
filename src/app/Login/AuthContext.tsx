@@ -1,7 +1,5 @@
 "use client";
 
-import { initializeApp } from "firebase/app";
-import { FirebaseApp } from "firebase/app"; // firebase typescript
 import React, {
   createContext,
   useContext,
@@ -11,6 +9,9 @@ import React, {
   ReactNode,
   RefObject,
 } from "react";
+//3rd party
+import { initializeApp } from "firebase/app";
+import { FirebaseApp } from "firebase/app"; // firebase typescript
 import {
   getAuth,
   connectAuthEmulator,
