@@ -9,24 +9,17 @@ import React, {
   ReactNode,
   RefObject,
 } from "react";
-import MainMenu from "./MainMenu";
-import SignUpMenu from "./SignUpMenu";
-import LogInMenu from "./LoginMenu";
+import { MainMenu } from "./AuthMenus";
 
 //Interface for the context values/functions
 interface menuContextInterface {
+  handleSetActive(component:React.JSX.Element):void;
   activeMenu: React.JSX.Element;
-  handleSetActive(index:number):void;
 }
 
 //Expecting React children components
 interface menuProviderProps {
   children: ReactNode;
-}
-
-interface menu {
-  component: React.JSX.Element;
-  id: number
 }
 
 export const MenuContext = createContext<menuContextInterface | undefined>(
@@ -37,20 +30,13 @@ export const MenuContext = createContext<menuContextInterface | undefined>(
 export const MenuProvider: React.FC<menuProviderProps> = ({ children }) => {
   const [activeMenu, setActiveMenu] = useState<React.JSX.Element>(<MainMenu/>);
 
-  const menus: menu[] = [
-    { component: <MainMenu />, id: 0},
-    { component: <SignUpMenu />, id: 1},
-    { component: <LogInMenu />, id: 2}
-  ];
-
-  // //default to the 1st menu/content
   // useEffect(() => {
-  //   handleSetActive(0)
+  //   setActiveMenu(<MainMenu/>)
   // }, []);
 
   //Selecting Menu Function
-  const handleSetActive = (index: number):void => {
-    setActiveMenu(menus[index].component);
+  const handleSetActive = (component: React.JSX.Element):void => {
+    setActiveMenu(component);
   };
 
   return (

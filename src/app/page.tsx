@@ -1,9 +1,7 @@
-"use client";
 import "./home.css";
-import { useMenu } from "./ui/Menus/MenuContext";
+import ActiveMenu from "./ui/Menus/ActiveMenu";
 
 export default function Home() {
-  const { handleSetActive, activeMenu } = useMenu();
 
   return (
     <main className="stars">
@@ -15,10 +13,8 @@ export default function Home() {
           {" "}
           <img src="/User.svg"></img>{" "}
         </button>
-         {activeMenu}
-        <button className="border p-5" onClick={()=>handleSetActive(0)}>1</button>
-        <button className="border p-5" onClick={()=>handleSetActive(1)}>2</button>
-        <button className="border p-5" onClick={()=>handleSetActive(2)}>3</button>
+    
+        <ActiveMenu />
       </div>
     </main>
   );
