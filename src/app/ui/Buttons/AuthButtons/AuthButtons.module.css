@@ -1,0 +1,9 @@
+.highlight:hover{
+  color: white;
+  cursor: pointer;
+}
+
+.highlight{
+  transition: all .218s;
+  color: #d7d7d7;
+}

@@ -2,6 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: 'Helvetica Now Text Medium';
+  src: url(./fonts/HelveticaNowText-Medium.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'Helvetica Now Text Regular';
+  src: url(./fonts/HelveticaNowText-Regular.ttf) format('truetype');
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -17,11 +27,32 @@
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: Helvetica Now Text Regular , Helvetica, sans-serif;
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
+}
+
+label{
+  display:flex;
+  flex-direction: column;
+}
+
+input{
+  width: fit-content;
+  height: 2.2rem;
+  color: black;
+  font-size: larger;
+  padding: 0.8rem;
+  border-radius: 0.375rem;
+  outline: none;
+  border: solid 2px transparent;
+  transition: all .218s;
+}
+
+input:focus{
+  border: solid 2px rgb(0,140,255);
 }

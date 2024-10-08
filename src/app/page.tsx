@@ -11,7 +11,7 @@ export default function Home() {
           title="View Profile"
         >
           {" "}
-          <img src="/User.svg"></img>{" "}
+          <img alt="profileIcon" src="/User.svg"></img>{" "}
         </button>
     
         <ActiveMenu />
