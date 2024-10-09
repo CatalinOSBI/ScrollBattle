@@ -5,7 +5,8 @@ import {
   MainUi,
   LogInUi,
   SignUpUi,
-} from "../Buttons/AuthButtons/AuthButtons";
+  RecoverPasswordUi,
+} from "../AuthUi/AuthUi";
 
 const boldFont = localFont({
   src: "../../fonts/THEBOLDFONT.ttf",
@@ -87,16 +88,16 @@ export const LogInMenu = () => {
 export const RecPasswordMenu = () => {
   return (
     <div className="w-2/5 p-20 border gap-4 rounded-md max-w-md min-h-[600px] min-w-[21.5rem] flex flex-col items-center justify-center h-2/4 bg-[#212121] menu">
-      <div className="flex flex-col items-end mb-[2rem]">
+      <div className="flex flex-col items-end mb-[10rem]">
         <p className={`${boldFont.className} text-8xl`}>
-          <span className="italic">Re</span>cover
+          <span className="italic">Re</span>set
         </p>
         <p className={`${noodleFont.className} text-7xl leading-[3.5rem]`}>
           Password
         </p>
       </div>
 
-      {/* <LogInUi /> */}
+      <RecoverPasswordUi />
     </div>
   );
 };

@@ -15,11 +15,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <AuthProvider>
-        <MenuProvider>
+      <MenuProvider>
+        <AuthProvider>
           <body className={`antialiased`}>{children}</body>
-        </MenuProvider>
-      </AuthProvider>
+        </AuthProvider>
+      </MenuProvider>
     </html>
   );
 }

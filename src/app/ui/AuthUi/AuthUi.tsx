@@ -1,19 +1,19 @@
 "use client";
 import React from "react";
-import OSBIbutton from "../OSBIbutton";
-import Googlebutton from "../Googlebutton";
-import { useMenu } from "../../Menus/MenuContext";
-import { SignUpMenu, LogInMenu, RecPasswordMenu } from "../../Menus/AuthMenus";
-import styles from "./AuthButtons.module.css";
+import OSBIbutton from "../Buttons/OSBIbutton";
+import Googlebutton from "./Googlebutton";
+import { useMenu } from "../Menus/MenuContext";
+import { SignUpMenu, LogInMenu, RecPasswordMenu } from "../Menus/AuthMenus";
+import styles from "./AuthUi.module.css";
 import localFont from "next/font/local";
 
 const helveticaMedium = localFont({
-  src: "../../../fonts/HelveticaNowText-Medium.ttf",
+  src: "../../fonts/HelveticaNowText-Medium.ttf",
   variable: "--font-helvetica-medium",
 });
 
 const helveticaRegular = localFont({
-  src: "../../../fonts/HelveticaNowText-Regular.ttf",
+  src: "../../fonts/HelveticaNowText-Regular.ttf",
   variable: "--font-helvetica-regular",
 });
 
@@ -133,6 +133,52 @@ export const LogInUi = () => {
         >
           Forgot your password?
         </span>
+      </div>
+    </div>
+  );
+};
+
+export const RecoverPasswordUi = () => {
+  const { handleSetActive } = useMenu();
+  return (
+    <div className="flex flex-col items-center gap-4">
+      <label>
+        Email:
+        <input type="email" autoComplete='email' />
+      </label>
+
+      <OSBIbutton
+        buttonName="RESET"
+        width={248}
+        primColor="rgb(53 53 53) 0%"
+        secColor="rgb(77 77 77 / 93%) 100%"
+      />
+
+
+      <div className="flex flex-col items-center">
+        <p
+          className={`${helveticaRegular.className} text-[#999999] text-nowrap`}
+        >
+          Don't have an account?{" "}
+          <span
+            className={`${helveticaMedium.className} ${styles.highlight} text-[#d7d7d7]`}
+            onClick={() => handleSetActive(<SignUpMenu />)}
+          >
+            Sign Up
+          </span>
+        </p>
+
+        <p
+          className={`${helveticaRegular.className} text-[#999999] text-nowrap`}
+        >
+          Already have an account?{" "}
+          <span
+            className={`${helveticaMedium.className} ${styles.highlight} text-[#d7d7d7]`}
+            onClick={() => handleSetActive(<LogInMenu />)}
+          >
+            Log In
+          </span>
+        </p>
       </div>
     </div>
   );

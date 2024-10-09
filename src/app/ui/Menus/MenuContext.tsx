@@ -30,10 +30,6 @@ export const MenuContext = createContext<menuContextInterface | undefined>(
 export const MenuProvider: React.FC<menuProviderProps> = ({ children }) => {
   const [activeMenu, setActiveMenu] = useState<React.JSX.Element>(<MainMenu/>);
 
-  // useEffect(() => {
-  //   setActiveMenu(<MainMenu/>)
-  // }, []);
-
   //Selecting Menu Function
   const handleSetActive = (component: React.JSX.Element):void => {
     setActiveMenu(component);

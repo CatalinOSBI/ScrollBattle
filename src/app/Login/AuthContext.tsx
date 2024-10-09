@@ -9,6 +9,9 @@ import React, {
   ReactNode,
   RefObject,
 } from "react";
+import { useMenu } from "../ui/Menus/MenuContext";
+import { MainMenu } from "../ui/Menus/AuthMenus";
+
 //3rd party
 import { initializeApp } from "firebase/app";
 import { FirebaseApp } from "firebase/app"; // firebase typescript
@@ -62,6 +65,8 @@ export const AuthProvider: React.FC<authProviderProps> = ({ children }) => {
   const passwordRef = useRef<HTMLInputElement>(null);
   const emailLogRef = useRef<HTMLInputElement>(null);
   const passwordLogRef = useRef<HTMLInputElement>(null);
+
+  const { handleSetActive } = useMenu()
 
   const firebaseConfig = {
     apiKey: process.env.NEXT_PUBLIC_FIRE1,
@@ -146,6 +151,7 @@ export const AuthProvider: React.FC<authProviderProps> = ({ children }) => {
           console.log(user);
         }
         // Signed up w/ google...
+        handleSetActive(<MainMenu/>);
       })
       .catch((error) => {
         console.log(error.message);

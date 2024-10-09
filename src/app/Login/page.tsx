@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import Googlebutton from "../ui/Buttons/Googlebutton";
+import Googlebutton from "../ui/AuthUi/Googlebutton";
 import { useAuth } from "./AuthContext";
 
 const Page = () => {
