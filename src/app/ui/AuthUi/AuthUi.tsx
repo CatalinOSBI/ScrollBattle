@@ -3,6 +3,7 @@ import React from "react";
 import OSBIbutton from "../Buttons/OSBIbutton";
 import Googlebutton from "./Googlebutton";
 import { useMenu } from "../Menus/MenuContext";
+import { useAuth } from "@/app/Login/AuthContext";
 import { SignUpMenu, LogInMenu, RecPasswordMenu } from "../Menus/AuthMenus";
 import styles from "./AuthUi.module.css";
 import localFont from "next/font/local";
@@ -34,26 +35,42 @@ export const MainUi = () => {
 
 export const SignUpUi = () => {
   const { handleSetActive } = useMenu();
+  const {
+    handleSignUp,
+    passwordRef,
+    conPasswordRef,
+    emailRef,
+  } = useAuth();
   return (
-    <div className="flex flex-col items-center gap-4">
+    <form onSubmit={(e) => handleSignUp(emailRef.current!.value, passwordRef.current!.value,  conPasswordRef.current!.value, e)} className="flex flex-col items-center gap-4">
       <label>
         Username:
-        <input type="text" autoComplete="new-username"/>
+        <input type="text" autoComplete="new-username" />
       </label>
 
       <label>
         Email:
-        <input type="email" autoComplete="email" />
+        <input type="email" autoComplete="email" ref={emailRef} />
       </label>
 
       <label>
         Password:
-        <input type="password" name='new-password' autoComplete="new-password" />
+        <input
+          type="password"
+          name="new-password"
+          autoComplete="new-password"
+          ref={passwordRef} 
+        />
       </label>
 
       <label>
         Confirm Password:
-        <input type="password" name='new-password' autoComplete="new-password" />
+        <input
+          type="password"
+          name="new-password"
+          autoComplete="new-password"
+          ref={conPasswordRef}
+        />
       </label>
 
       <OSBIbutton
@@ -83,7 +100,7 @@ export const SignUpUi = () => {
           Forgot your password?
         </span>
       </div>
-    </div>
+    </form>
   );
 };
 
@@ -93,12 +110,12 @@ export const LogInUi = () => {
     <div className="flex flex-col items-center gap-4">
       <label>
         Email:
-        <input type="email" autoComplete='email' />
+        <input type="email" autoComplete="email" />
       </label>
 
       <label>
         Password:
-        <input type="password" autoComplete='off' />
+        <input type="password" autoComplete="off" />
       </label>
 
       <OSBIbutton
@@ -144,7 +161,7 @@ export const RecoverPasswordUi = () => {
     <div className="flex flex-col items-center gap-4">
       <label>
         Email:
-        <input type="email" autoComplete='email' />
+        <input type="email" autoComplete="email" />
       </label>
 
       <OSBIbutton
@@ -153,7 +170,6 @@ export const RecoverPasswordUi = () => {
         primColor="rgb(53 53 53) 0%"
         secColor="rgb(77 77 77 / 93%) 100%"
       />
-
 
       <div className="flex flex-col items-center">
         <p

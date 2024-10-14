@@ -38,6 +38,7 @@ const OSBIbutton: React.FC<OSBIbuttonProps> = ({
     >
       <button
         onClick={onClick}
+        type="submit"
         className="OSBIbutton"
         style={{
           width: width,

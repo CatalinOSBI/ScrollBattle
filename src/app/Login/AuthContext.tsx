@@ -31,13 +31,16 @@ interface authContextInterface {
   isLoggedIn: boolean;
   emailRef: RefObject<HTMLInputElement>;
   passwordRef: RefObject<HTMLInputElement>;
+  conPasswordRef: RefObject<HTMLInputElement>;
   emailLogRef: RefObject<HTMLInputElement>;
   passwordLogRef: RefObject<HTMLInputElement>;
   userEmail: string | null;
+  userDisplayName:  string | null;
   handleSignOut: () => void;
   handleSignUp: (
     email: string,
     password: string,
+    conPassword: string,
     e: React.FormEvent<HTMLFormElement>
   ) => Promise<void>;
   handleLogIn: (
@@ -60,9 +63,11 @@ export const AuthContext = createContext<authContextInterface | undefined>(
 //Provider component
 export const AuthProvider: React.FC<authProviderProps> = ({ children }) => {
   const [userEmail, setUserEmail] = useState<string | null>(null);
+  const [userDisplayName, setUserDisplayName] = useState<string | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
+  const conPasswordRef = useRef<HTMLInputElement>(null);
   const emailLogRef = useRef<HTMLInputElement>(null);
   const passwordLogRef = useRef<HTMLInputElement>(null);
 
@@ -84,10 +89,11 @@ export const AuthProvider: React.FC<authProviderProps> = ({ children }) => {
   const providerGoogle = new GoogleAuthProvider();
   // connectAuthEmulator(auth, "http://localhost:9099");
 
-  //Sing Up (Create Account)
+  //Sign Up (Create Account)
   const handleSignUp = (
     email: string,
     password: string,
+    conPassword: string,
     e: React.FormEvent<HTMLFormElement>
   ): Promise<void> => {
     e.preventDefault();
@@ -179,7 +185,8 @@ export const AuthProvider: React.FC<authProviderProps> = ({ children }) => {
         setIsLoggedIn(true);
 
         //Get user data
-        setUserEmail(user.email);
+        setUserEmail(user.email!);
+        setUserDisplayName(user.displayName!);
       } else {
         setIsLoggedIn(false);
       }
@@ -194,9 +201,11 @@ export const AuthProvider: React.FC<authProviderProps> = ({ children }) => {
         isLoggedIn,
         emailRef,
         passwordRef,
+        conPasswordRef,
         emailLogRef,
         passwordLogRef,
         userEmail,
+        userDisplayName,
         handleSignUp,
         handleSignOut,
         handleLogIn,

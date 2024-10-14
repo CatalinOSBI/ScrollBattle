@@ -1,12 +1,7 @@
 import React from "react";
 import OSBIbutton from "../Buttons/OSBIbutton";
 import localFont from "next/font/local";
-import {
-  MainUi,
-  LogInUi,
-  SignUpUi,
-  RecoverPasswordUi,
-} from "../AuthUi/AuthUi";
+import { MainUi, LogInUi, SignUpUi, RecoverPasswordUi } from "../AuthUi/AuthUi";
 
 const boldFont = localFont({
   src: "../../fonts/THEBOLDFONT.ttf",
@@ -33,7 +28,7 @@ export const MainMenu = () => {
           Battle
         </p>
       </div>
-      <OSBIbutton buttonName="PLAY" width={248}/>
+      <OSBIbutton buttonName="PLAY" width={248} />
       <MainUi />
     </div>
   );
