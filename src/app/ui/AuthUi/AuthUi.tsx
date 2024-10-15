@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import OSBIbutton from "../Buttons/OSBIbutton";
 import Googlebutton from "./Googlebutton";
 import { useMenu } from "../Menus/MenuContext";
@@ -37,16 +37,42 @@ export const SignUpUi = () => {
   const { handleSetActive } = useMenu();
   const {
     handleSignUp,
+    usernameRef,
     passwordRef,
     conPasswordRef,
     emailRef,
+    firebaseErrorMessage,
+    setFirebaseErrorMessage,
   } = useAuth();
+  const [errorMessage, setErrorMessage] = useState<string>('');
+
+  //Submit Function
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    //Error Reset
+    setErrorMessage('');
+    setFirebaseErrorMessage('');
+
+    handleSignUp(
+      usernameRef.current!.value,
+      emailRef.current!.value,
+      passwordRef.current!.value,
+      conPasswordRef.current!.value,
+      e
+    ).catch((error) => {
+      setErrorMessage(error);
+      console.log(errorMessage);
+    });
+  };
+
   return (
-    <form onSubmit={(e) => handleSignUp(emailRef.current!.value, passwordRef.current!.value,  conPasswordRef.current!.value, e)} className="flex flex-col items-center gap-4">
+    <form onSubmit={handleSubmit} className="flex flex-col items-center gap-4">
       <label>
         Username:
-        <input type="text" autoComplete="new-username" />
+        <input type="text" autoComplete="new-username" ref={usernameRef} />
       </label>
+
 
       <label>
         Email:
@@ -59,8 +85,8 @@ export const SignUpUi = () => {
           type="password"
           name="new-password"
           autoComplete="new-password"
-          ref={passwordRef} 
-        />
+          ref={passwordRef}
+          />
       </label>
 
       <label>
@@ -70,8 +96,14 @@ export const SignUpUi = () => {
           name="new-password"
           autoComplete="new-password"
           ref={conPasswordRef}
-        />
+          />
       </label>
+
+      {/* ERRORS */}
+          <p className="text-red-400 text-center text-sm">
+            {firebaseErrorMessage}
+            {errorMessage}
+          </p>
 
       <OSBIbutton
         buttonName="SIGN UP"
@@ -107,7 +139,7 @@ export const SignUpUi = () => {
 export const LogInUi = () => {
   const { handleSetActive } = useMenu();
   return (
-    <div className="flex flex-col items-center gap-4">
+    <form className="flex flex-col items-center gap-4">
       <label>
         Email:
         <input type="email" autoComplete="email" />
@@ -151,7 +183,7 @@ export const LogInUi = () => {
           Forgot your password?
         </span>
       </div>
-    </div>
+    </form>
   );
 };
 

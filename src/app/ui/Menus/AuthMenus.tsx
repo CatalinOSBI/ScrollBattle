@@ -40,7 +40,7 @@ export const MainMenu = () => {
 
 export const SignUpMenu = () => {
   return (
-    <div className="w-2/5 p-20 border gap-4 rounded-md max-w-md min-h-[600px] min-w-[21.5rem] flex flex-col items-center justify-center h-2/4 bg-[#212121] menu">
+    <div className="w-2/5 p-20 border gap-4 rounded-md max-w-md min-h-[628px] min-w-[21.5rem] flex flex-col items-center justify-center h-2/4 bg-[#212121] menu">
       <div className="flex flex-col items-end mb-1">
         <p className={`${boldFont.className} text-8xl`}>
           <span className="italic">Si</span>gn

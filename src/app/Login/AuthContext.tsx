@@ -18,6 +18,7 @@ import { FirebaseApp } from "firebase/app"; // firebase typescript
 import {
   getAuth,
   connectAuthEmulator,
+  updateProfile,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
@@ -28,8 +29,11 @@ import {
 
 //Interface for the context values/functions
 interface authContextInterface {
+  firebaseErrorMessage: string ;
+  setFirebaseErrorMessage: (value: string ) => void;
   isLoggedIn: boolean;
   emailRef: RefObject<HTMLInputElement>;
+  usernameRef: RefObject<HTMLInputElement>;
   passwordRef: RefObject<HTMLInputElement>;
   conPasswordRef: RefObject<HTMLInputElement>;
   emailLogRef: RefObject<HTMLInputElement>;
@@ -38,6 +42,7 @@ interface authContextInterface {
   userDisplayName:  string | null;
   handleSignOut: () => void;
   handleSignUp: (
+    username: string,
     email: string,
     password: string,
     conPassword: string,
@@ -64,8 +69,10 @@ export const AuthContext = createContext<authContextInterface | undefined>(
 export const AuthProvider: React.FC<authProviderProps> = ({ children }) => {
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [userDisplayName, setUserDisplayName] = useState<string | null>(null);
+  const [firebaseErrorMessage, setFirebaseErrorMessage] = useState<string>('');
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const emailRef = useRef<HTMLInputElement>(null);
+  const usernameRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const conPasswordRef = useRef<HTMLInputElement>(null);
   const emailLogRef = useRef<HTMLInputElement>(null);
@@ -91,6 +98,7 @@ export const AuthProvider: React.FC<authProviderProps> = ({ children }) => {
 
   //Sign Up (Create Account)
   const handleSignUp = (
+    username: string,
     email: string,
     password: string,
     conPassword: string,
@@ -98,24 +106,60 @@ export const AuthProvider: React.FC<authProviderProps> = ({ children }) => {
   ): Promise<void> => {
     e.preventDefault();
 
-    // Check for empty fields
+    // Check for errors
     if (!email || !password) {
       return Promise.reject("Password and email are required"); //Break
-    }
+    } else if (password !== conPassword) {
+      return Promise.reject("Passwords do not match"); //Break
+    } else if (password.length <= 5) {
+      return Promise.reject("Password should be at least 6 characters"); //Break
+    } else if (!username) {
+      return Promise.reject("Username required"); //Break
+    } 
 
     return createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
+
         // Signed in
         const user = userCredential.user!;
         console.log(user);
 
         // sendEmailVerification(user);
+        // update username
+        updateProfile(user, { displayName: username })
+        console.log('Updated Username')
         console.log("User signed in successfully!");
+        // Change Menu
+        handleSetActive (<MainMenu/>)
+        // Change the display name
+        setUserDisplayName(username)
+
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-        console.error(errorCode, errorMessage);
+        
+        // Check for firebase errors
+        // Invalid Email
+        if (errorCode === 'auth/invalid-email') {
+          console.error('Invalid email format');
+          setFirebaseErrorMessage('Invalid email format')
+
+        // Email Already in use  
+        } else if (errorCode === 'auth/email-already-in-use') {
+          console.error('Email already in use');
+          setFirebaseErrorMessage('Email already in use')
+
+        // Network error  
+        } else if (errorCode === 'auth/network-request-failed') {
+          console.error('Network error');
+          setFirebaseErrorMessage('Network error')
+
+        // Other  
+        } else {
+          console.error(`Error [${errorCode}]: ${errorMessage}`);
+          setFirebaseErrorMessage(`Error [${errorCode}]: ${errorMessage}`)
+        }
       });
   };
 
@@ -198,6 +242,8 @@ export const AuthProvider: React.FC<authProviderProps> = ({ children }) => {
   return (
     <AuthContext.Provider
       value={{
+        firebaseErrorMessage,
+        setFirebaseErrorMessage,
         isLoggedIn,
         emailRef,
         passwordRef,
@@ -205,6 +251,7 @@ export const AuthProvider: React.FC<authProviderProps> = ({ children }) => {
         emailLogRef,
         passwordLogRef,
         userEmail,
+        usernameRef,
         userDisplayName,
         handleSignUp,
         handleSignOut,
