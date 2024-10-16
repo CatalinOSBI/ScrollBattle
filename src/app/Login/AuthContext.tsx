@@ -15,6 +15,7 @@ import { MainMenu } from "../ui/Menus/AuthMenus";
 //3rd party
 import { initializeApp } from "firebase/app";
 import { FirebaseApp } from "firebase/app"; // firebase typescript
+import { getFirestore, setDoc, doc, getDoc } from "firebase/firestore";
 import {
   getAuth,
   connectAuthEmulator,
@@ -29,8 +30,8 @@ import {
 
 //Interface for the context values/functions
 interface authContextInterface {
-  firebaseErrorMessage: string ;
-  setFirebaseErrorMessage: (value: string ) => void;
+  firebaseErrorMessage: string;
+  setFirebaseErrorMessage: (value: string) => void;
   isLoggedIn: boolean;
   emailRef: RefObject<HTMLInputElement>;
   usernameRef: RefObject<HTMLInputElement>;
@@ -39,7 +40,7 @@ interface authContextInterface {
   emailLogRef: RefObject<HTMLInputElement>;
   passwordLogRef: RefObject<HTMLInputElement>;
   userEmail: string | null;
-  userDisplayName:  string | null;
+  userDisplayName: string | null;
   handleSignOut: () => void;
   handleSignUp: (
     username: string,
@@ -69,7 +70,7 @@ export const AuthContext = createContext<authContextInterface | undefined>(
 export const AuthProvider: React.FC<authProviderProps> = ({ children }) => {
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [userDisplayName, setUserDisplayName] = useState<string | null>(null);
-  const [firebaseErrorMessage, setFirebaseErrorMessage] = useState<string>('');
+  const [firebaseErrorMessage, setFirebaseErrorMessage] = useState<string>("");
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const emailRef = useRef<HTMLInputElement>(null);
   const usernameRef = useRef<HTMLInputElement>(null);
@@ -78,7 +79,7 @@ export const AuthProvider: React.FC<authProviderProps> = ({ children }) => {
   const emailLogRef = useRef<HTMLInputElement>(null);
   const passwordLogRef = useRef<HTMLInputElement>(null);
 
-  const { handleSetActive } = useMenu()
+  const { handleSetActive } = useMenu();
 
   const firebaseConfig = {
     apiKey: process.env.NEXT_PUBLIC_FIRE1,
@@ -93,6 +94,7 @@ export const AuthProvider: React.FC<authProviderProps> = ({ children }) => {
   // Initialize Firebase
   const app: FirebaseApp = initializeApp(firebaseConfig);
   const auth = getAuth(app);
+  const FireStoreDB = getFirestore(app);
   const providerGoogle = new GoogleAuthProvider();
   // connectAuthEmulator(auth, "http://localhost:9099");
 
@@ -107,58 +109,65 @@ export const AuthProvider: React.FC<authProviderProps> = ({ children }) => {
     e.preventDefault();
 
     // Check for errors
+    // Password and Email required
     if (!email || !password) {
       return Promise.reject("Password and email are required"); //Break
+
+      // Passwords don't match
     } else if (password !== conPassword) {
       return Promise.reject("Passwords do not match"); //Break
+
+      // Short Password
     } else if (password.length <= 5) {
       return Promise.reject("Password should be at least 6 characters"); //Break
+
+      // Username Required
     } else if (!username) {
       return Promise.reject("Username required"); //Break
-    } 
+    }
 
     return createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-
         // Signed in
         const user = userCredential.user!;
         console.log(user);
 
         // sendEmailVerification(user);
         // update username
-        updateProfile(user, { displayName: username })
-        console.log('Updated Username')
+        updateProfile(user, { displayName: username });
+        console.log("Updated Username");
         console.log("User signed in successfully!");
         // Change Menu
-        handleSetActive (<MainMenu/>)
+        handleSetActive(<MainMenu />);
+        // Update FirestoreDB
+        handleUpdateUserDB()
         // Change the display name
-        setUserDisplayName(username)
-
+        setUserDisplayName(username);
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-        
+
         // Check for firebase errors
         // Invalid Email
-        if (errorCode === 'auth/invalid-email') {
-          console.error('Invalid email format');
-          setFirebaseErrorMessage('Invalid email format')
+        if (errorCode === "auth/invalid-email") {
+          console.error("Invalid email format");
+          setFirebaseErrorMessage("Invalid email format");
 
-        // Email Already in use  
-        } else if (errorCode === 'auth/email-already-in-use') {
-          console.error('Email already in use');
-          setFirebaseErrorMessage('Email already in use')
+          // Email Already in use
+        } else if (errorCode === "auth/email-already-in-use") {
+          console.error("Email already in use");
+          setFirebaseErrorMessage("Email already in use");
 
-        // Network error  
-        } else if (errorCode === 'auth/network-request-failed') {
-          console.error('Network error');
-          setFirebaseErrorMessage('Network error')
+          // Network error
+        } else if (errorCode === "auth/network-request-failed") {
+          console.error("Network error");
+          setFirebaseErrorMessage("Network error");
 
-        // Other  
+          // Other
         } else {
           console.error(`Error [${errorCode}]: ${errorMessage}`);
-          setFirebaseErrorMessage(`Error [${errorCode}]: ${errorMessage}`)
+          setFirebaseErrorMessage(`Error [${errorCode}]: ${errorMessage}`);
         }
       });
   };
@@ -201,7 +210,7 @@ export const AuthProvider: React.FC<authProviderProps> = ({ children }) => {
           console.log(user);
         }
         // Signed up w/ google...
-        handleSetActive(<MainMenu/>);
+        handleSetActive(<MainMenu />);
       })
       .catch((error) => {
         console.log(error.message);
@@ -238,6 +247,37 @@ export const AuthProvider: React.FC<authProviderProps> = ({ children }) => {
 
     return unsubscribe;
   }, []);
+
+  //Update userDB
+  const handleUpdateUserDB = async () => {
+    const currentUser = auth.currentUser;
+
+    if (currentUser) {
+      const uID = currentUser.uid;
+
+      // DB Object
+      const docData = {
+        userId: uID,
+      };
+
+      // DB Doc Path
+      const docPath = doc(FireStoreDB, `users/${uID}`);
+      try {
+        // Check if Document exists
+        const myDocument = await getDoc(docPath);
+
+        if (!myDocument.exists()) {
+          // If document does not exist, create an empty document (or add fields if needed)
+          await setDoc(docPath, docData); // Optional to store userId
+          console.log("Updated User DB (New User)");
+        } else {
+          console.log("User document already exists");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
 
   return (
     <AuthContext.Provider
