@@ -126,10 +126,14 @@ export const AuthProvider: React.FC<authProviderProps> = ({ children }) => {
       return Promise.reject("Username required"); //Break
     }
 
-    return createUserWithEmailAndPassword(auth, email, password)
+    return createUserWithEmailAndPassword (auth, email, password)
       .then((userCredential) => {
         // Signed in
         const user = userCredential.user!;
+        const userData = {
+          email: email,
+          displayName: username,
+        }
         console.log(user);
 
         // sendEmailVerification(user);
@@ -139,10 +143,10 @@ export const AuthProvider: React.FC<authProviderProps> = ({ children }) => {
         console.log("User signed in successfully!");
         // Change Menu
         handleSetActive(<MainMenu />);
-        // Update FirestoreDB
-        handleUpdateUserDB()
         // Change the display name
-        setUserDisplayName(username);
+        setUserDisplayName(username)
+        // Update FirestoreDB
+        handleUpdateUserDB(username)
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -249,15 +253,19 @@ export const AuthProvider: React.FC<authProviderProps> = ({ children }) => {
   }, []);
 
   //Update userDB
-  const handleUpdateUserDB = async () => {
+  const handleUpdateUserDB = async (username:string) => {
     const currentUser = auth.currentUser;
 
     if (currentUser) {
       const uID = currentUser.uid;
+      const displayName = username
+      const email = currentUser.email
 
       // DB Object
       const docData = {
         userId: uID,
+        userDisplayName: displayName,
+        userEmail: email,
       };
 
       // DB Doc Path
